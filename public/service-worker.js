@@ -1,5 +1,10 @@
+const APP_PREFIX = 'budget-';
+const VERSION = 'version_01';
+const CACHE_NAME = APP_PREFIX + VERSION;
+
 const FILES_TO_CACHE = [
     "/",
+    "./public/manifest.json",
     "./public/index.html",
     "./public/js/index.js",
     "./public/css/styles.css",
