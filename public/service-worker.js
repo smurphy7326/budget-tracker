@@ -59,7 +59,7 @@ self.addEventListener('fetch', function(evt) {
         evt.respondWith(
             caches
             .open(DATA_CACHE_NAME)
-            .then(cache=> {
+            .then(cache => {
                 return fetch(evt.request)
                 .then(response => {
                     // If the response was good, clone it and store it in the cache. 
