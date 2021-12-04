@@ -9,7 +9,7 @@
 
   <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
   <link rel="stylesheet" href="css/styles.css">
-  <link rel="manifest" href="manifest.json"> <!-- this is added in for the manifest.json document-->
+  <link rel="manifest" href="manifest.json">
 
   <title>Budget Tracker</title>
 
@@ -45,18 +45,17 @@
 
   <script src="https://cdn.jsdelivr.net/npm/chart.js@2.8.0"></script>
   <script src="js/index.js"></script>
-  <script src=""></script> <!-- This goes back to the idb file that we made earlier-->
-  <script type="text/javascript">
+  <script src="/js/idb.js"></script>
+
+  <script>
     (function() {
-      if ("serviceWorker" in navigator) {
-        navigator.serviceWorker
-          .register("./service-worker.js")
-          .then(() => console.log("Service Worker registered successfully."))
-          .catch(error =>
-            console.log("Service Worker registration failed:", error)
-          );
+      if("serviceWorker" in navigator) {
+        navigator.serviceWorker.register('./service-worker.js')
+        .then(() => console.log ('Service Worker registered successfully'))
+        .catch(error => console.log('Service Worker registration has failed:', error))
       }
-    })();
+    })()
+    
   </script>
 </body>
 </html>
