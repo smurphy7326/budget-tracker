@@ -43,9 +43,23 @@ request.onsuccess = function(event) {
                     'Content-type': 'application/json'
                 }
             })
+            .then(response => response.json)
+            .then(serverResponse => {
+                if (serverResponse.message) {
+                    throw new Error(serverResponse)
+                }
+                const transaction = db.transaction(['new_transaction'], 'readwrite')
+                const transactionObjectStore = transaction.objectStore('new_transaction');
+                TransitionObjectStore.clear()
+                alert('All transactions have been submitted!');
+            })
+            .catch(err => {
+                console.log(err);
+            });
         }
     }
   }
 
+  window.addEventListener('online', uploadTransaction)
 
 
