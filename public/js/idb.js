@@ -1,3 +1,5 @@
+// Indexed database
+
 let db;
 const request = indexedDB.open('budget_tracker', 1); // make the connection
 
@@ -9,20 +11,19 @@ request.onupgradeneeded = function(event) {
 request.onsuccess = function(event) {
     db = event.target.result;
 
-    // this part is going to check to see if the app is online before reading the db
     if(navigator.onLine) {
         uploadTransaction();
     }
   }
 
-  request.onerror= function(event) {
+  request.onerror = function(event) {
     console.log(event.target.errorCode);
   };
 
   // This is to save the records that you may have
 
   function saveRecord(record) {
-      const transaction = db.transaction(["new_transaction", "readwrite"]);
+      const transaction = db.transaction(["new_transaction"], "readwrite");
       const transactionObjectStore = transaction.objectStore("new_transaction")
       transactionObjectStore.add(record);
   };
@@ -30,12 +31,12 @@ request.onsuccess = function(event) {
   // This is to upload the different transactions 
   function uploadTransaction() {
     const transaction = db.transaction(['new_transaction'], 'readwrite');
-    const transactionObjectStore = transaction.objectStore('new_transaction');
-    const getAll = transactionObjectStore.getAll();
+    const transactionsObjectStore = transaction.objectStore('new_transaction');
+    const getAll = transactionsObjectStore.getAll();
     
-    getAll.onSuccess = function() {
+    getAll.onsuccess = function() {
         if(getAll.result.length > 0 ) {
-            fetch('/api/transaction/bulk', {
+            fetch('/api/transaction/bulk', { // This goes to the routes/api.js file and goes to the transaction/bulk section
                 method: 'POST',
                 body: JSON.stringify(getAll.result),
                 headers: {
@@ -49,8 +50,8 @@ request.onsuccess = function(event) {
                     throw new Error(serverResponse)
                 }
                 const transaction = db.transaction(['new_transaction'], 'readwrite')
-                const transactionObjectStore = transaction.objectStore('new_transaction');
-                TransitionObjectStore.clear()
+                const transactionsObjectStore = transaction.objectStore('new_transaction');
+                transactionsObjectStore.clear();
                 alert('All transactions have been submitted!');
             })
             .catch(err => {
@@ -61,5 +62,4 @@ request.onsuccess = function(event) {
   }
 
   window.addEventListener('online', uploadTransaction)
-
 
