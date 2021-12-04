@@ -31,8 +31,8 @@ request.onsuccess = function(event) {
   // This is to upload the different transactions 
   function uploadTransaction() {
     const transaction = db.transaction(['new_transaction'], 'readwrite');
-    const transactionsObjectStore = transaction.objectStore('new_transaction');
-    const getAll = transactionsObjectStore.getAll();
+    const transactionObjectStore = transaction.objectStore('new_transaction');
+    const getAll = transactionObjectStore.getAll();
     
     getAll.onsuccess = function() {
         if(getAll.result.length > 0 ) {
@@ -50,8 +50,8 @@ request.onsuccess = function(event) {
                     throw new Error(serverResponse)
                 }
                 const transaction = db.transaction(['new_transaction'], 'readwrite')
-                const transactionsObjectStore = transaction.objectStore('new_transaction');
-                transactionsObjectStore.clear();
+                const transactionObjectStore = transaction.objectStore('new_transaction');
+                transactionObjectStore.clear();
                 alert('All transactions have been submitted!');
             })
             .catch(err => {
