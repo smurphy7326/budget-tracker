@@ -1,5 +1,7 @@
 
 {
+    "name": "Budget Tracker",
+    "short_name": "Budget Tracker",
     "icons": [
         {
             "src": "public/icons/icon-72x72.png",
@@ -42,9 +44,7 @@
             "type": "image/png"
         }
     ],
-    "name": "Budget Tracker",
-    "short_name": "Tracking",
-    "start_url": "../index.html",
+    "start_url": "/",
     "display": "standalone",
     "theme_color": "#ffffff",
     "background-color": "#0079d9"  

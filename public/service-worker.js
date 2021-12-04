@@ -4,7 +4,6 @@ const CACHE_NAME = APP_PREFIX + VERSION;
 
 const FILES_TO_CACHE = [
     "/",
-    "./public/manifest.json",
     "./public/index.html",
     "./public/js/index.js",
     "./public/css/styles.css",
@@ -15,32 +14,31 @@ const FILES_TO_CACHE = [
     "./public/icons/icon-152x152.png",
     "./public/icons/icon-192x192.png",
     "./public/icons/icon-384x384.png",
-    "./public/icons/icon-512x512.png",
-
+    "./public/icons/icon-512x512.png"
 ];
 
-// Install the service worker that again should be mostly the same in all different applications
+// Install
 
 self.addEventListener('install', function(evt) {
     evt.waitUntil(
-        caches.open(CACHE_NAME).then(cache => {
-            console.log('Your files were pre-cached successfully!');
-            return cache.addAll(FILES_TO_CAHCE);
+        caches.open(CACHE_NAME).then(function(cache) {
+            console.log('Installing cache: ' + CACHE_NAME);
+            return cache.addAll(FILES_TO_CACHE);
         })
     );
 
     self.skipWaiting();
 
-})
+});
 
-// Installing the service worker and having to remove old data from the cache
+// Activate the service worker
 
 self.addEventListener('activate', function(evt) {
     evt.waitUntil(
         caches.keys().then(keyList => {
             return Promise.all(
                 keyList.map(key => {
-                    if(key !== CACHE_NAME) {
+                    if(key !== CACHE_NAME && key !== DATA_CACHE_NAME) {
                         console.log('Removing old cache data', key);
                         return caches.delete(key);
                     }
@@ -58,7 +56,7 @@ self.addEventListener('fetch', function(evt) {
     if (evt.request.url.includes('/api/')) {
         evt.respondWith(
             caches
-            .open(CACHE_NAME) // maybe DATA_CACHE_NAME
+            .open(DATA_CACHE_NAME) // maybe DATA_CACHE_NAME
             .then(cache=> {
                 return fetch(evt.request)
                 .then(response => {
@@ -71,7 +69,7 @@ self.addEventListener('fetch', function(evt) {
                 })
 
                 .catch(err => {
-                   // if there is an error the network response will have failed and you have to try and get it from the cache
+                   // The request fails, it tries to get it form the cache
                    return cache.match(evt.request); 
                 });
             })
@@ -87,10 +85,11 @@ self.addEventListener('fetch', function(evt) {
                     return response;
                 } else if (evt.request.headers.get('accept').includes('text/html'))
             {
-                // return the cached home page for all requests for the different HTML pages
+                // return cached home page for all the requests
                 return caches.match('/');
             }
           });
         })
     );
-})
+});
+
