@@ -1,11 +1,13 @@
-const APP_PREFIX = 'budget-';
+const APP_PREFIX = 'BudgetTracker-';
 const VERSION = 'version_01';
 const CACHE_NAME = APP_PREFIX + VERSION;
 
 const FILES_TO_CACHE = [
     "/",
     "./public/index.html",
+    "./public/manifest.json",
     "./public/js/index.js",
+    "./public/js/idb.js",
     "./public/css/styles.css",
     "./public/icons/icon-72x72.png",
     "./public/icons/icon-96x96.png",
@@ -64,10 +66,8 @@ self.addEventListener('fetch', function(evt) {
                     if (response.status === 200) {
                         cache.put(evt.request.url, response.clone());
                     }
-
                     return response;
                 })
-
                 .catch(err => {
                    // The request fails, it tries to get it form the cache
                    return cache.match(evt.request); 
@@ -75,7 +75,6 @@ self.addEventListener('fetch', function(evt) {
             })
             .catch(err => console.log(err))
         );
-
         return;
     }
     evt.respondWith(
@@ -85,7 +84,6 @@ self.addEventListener('fetch', function(evt) {
                     return response;
                 } else if (evt.request.headers.get('accept').includes('text/html'))
             {
-                // return cached home page for all the requests
                 return caches.match('/');
             }
           });

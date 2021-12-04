@@ -20,15 +20,12 @@ request.onsuccess = function(event) {
     console.log(event.target.errorCode);
   };
 
-  // This is to save the records that you may have
-
   function saveRecord(record) {
-      const transaction = db.transaction(["new_transaction"], "readwrite");
-      const transactionObjectStore = transaction.objectStore("new_transaction")
+      const transaction = db.transaction(['new_transaction'], 'readwrite');
+      const transactionObjectStore = transaction.objectStore('new_transaction')
       transactionObjectStore.add(record);
-  };
+  }
 
-  // This is to upload the different transactions 
   function uploadTransaction() {
     const transaction = db.transaction(['new_transaction'], 'readwrite');
     const transactionObjectStore = transaction.objectStore('new_transaction');
@@ -36,7 +33,7 @@ request.onsuccess = function(event) {
     
     getAll.onsuccess = function() {
         if(getAll.result.length > 0 ) {
-            fetch('/api/transaction/bulk', { // This goes to the routes/api.js file and goes to the transaction/bulk section
+            fetch('/api/transaction/bulk', {
                 method: 'POST',
                 body: JSON.stringify(getAll.result),
                 headers: {
